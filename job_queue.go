@@ -116,7 +116,10 @@ func (job *JobQueueT) SetAutoPauseWaitEnabled(state bool) {
 }
 
 func (job *JobQueueT) Running() bool {
-	if job.autoPause {
+	job.mu.Lock()
+	autoPause := job.autoPause
+	job.mu.Unlock()
+	if autoPause {
 		job.WaitIfPaused()
 	}
 	return job.pCtx.Err() == nil

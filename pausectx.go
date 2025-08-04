@@ -55,7 +55,10 @@ func (pCtx *pausableContextT) Unpause() {
 }
 
 func (pCtx *pausableContextT) Paused() bool {
-	return pCtx.paused
+	pCtx.mu.Lock()
+	paused := pCtx.paused
+	pCtx.mu.Unlock()
+	return paused
 }
 
 func (pCtx *pausableContextT) WaitIfPaused() {
